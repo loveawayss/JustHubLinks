@@ -65,8 +65,4 @@ jobs:
       - name: Reject secrets and private source references
         shell: bash
         run: |
-          ! git grep -n -E -i '(sb_secret_|service_role|supabase.{0,40}(secret|service)|-----begin.{0,30}private key|ghp_[a-z0-9_]+|github_pat_[a-z0-9_]+|akia[0-9a-z]{16}|loveawayss/JustPrivate)' -- ':!SECURITY.md' ':!AGENTS.md' ':!CONTRIBUTING.md' ':!.github/workflows/ci.yml'
-      - name: Validate legacy installer hash
-        shell: bash
-        run: |
-          test "$(sha256sum releases/JustHubInstaller.exe | cut -d ' ' -f 1)" = "$(node -p 'JSON.parse(require("fs").readFileSync("update_info.json")).sha256')"
+          ! git grep -n -E -i '(sb_secret_|service_role|supabase.{0,40}(secret|service)|-----begin.{0,30}private key|ghp_[a-z0-9_]+|github_pat_[a-z0-9_]+|akia[0-9a-z]{16}|loveawayss/JustPrivate)' -- ':!.github/workflows/ci.yml'

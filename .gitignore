@@ -18,3 +18,11 @@ Thumbs.db
 dist/
 build/
 node_modules/
+
+# Binary assets (use GitHub Releases instead of Git)
+releases/
+*.exe
+*.msi
+*.zip
+*.tar.gz
+

@@ -1,46 +1,35 @@
 # Just Releases
 
-Fonte publica de distribuicao e metadados dos projetos da Just.
+Catálogo central de distribuição e metadados de atualização dos projetos Just.
 
-Este repositorio centraliza catalogos, manifestos de atualizacao e links verificaveis para os projetos da Just. Nao inclua segredos, dados pessoais ou builds de teste.
+## Estrutura do Repositório
 
-## Arquivos principais
+- **`catalog.json`**: Índice oficial de produtos e canais de distribuição disponíveis.
+- **`products/`**: Manifestos individuais por produto contendo versões, canais, URLs dos assets e hashes SHA-256:
+  - `products/justhub.json`: Metadados do Just HUB.
+  - `products/justcleaner.json`: Metadados do Just Cleaner.
+  - `products/justprivate.json`: Metadados do JustPrivate.
+  - `products/justprivate-update-manifest.json`: Manifesto assinado criptograficamente (`.sig`).
+- **`update_info.json`**: Endpoint de verificação e download da versão estável mais recente do Just HUB.
+- **`install.ps1`**: Script PowerShell para instalação e atualização automatizada via linha de comando.
 
-- `catalog.json`: indice dos produtos e canais publicados.
-- `products/`: manifesto especifico de cada produto.
-- `update_info.json`: manifesto compativel usado pelo atualizador atual do JustHub.
-- `releases/`: copia legada do instalador mantida durante a transicao.
-- GitHub Releases: local recomendado para os instaladores distribuidos.
+## Hospedagem de Binários
 
-## Fluxo de publicacao
+Todos os executáveis e instaladores são hospedados exclusivamente na seção de [GitHub Releases](https://github.com/loveawayss/JustReleases/releases), mantendo o versionamento Git focado unicamente em texto e metadados.
 
-1. Validar o build do produto.
-2. Gerar o instalador e calcular o SHA-256 do arquivo final.
-3. Criar uma GitHub Release com o instalador como asset.
-4. Atualizar o manifesto do produto, `catalog.json` e, quando aplicavel, `update_info.json`.
-5. Conferir se a URL direta e o hash correspondem exatamente ao asset publicado.
-6. Publicar somente apos revisao.
+## Verificação de Integridade
 
-## Links diretos
+Cada artefato publicado possui seu hash SHA-256 declarado nos manifestos para validação pré-execução:
 
-Para baixar um asset sem abrir a pagina da Release, use:
+```powershell
+(Get-FileHash -Path "arquivo.exe" -Algorithm SHA256).Hash.ToLowerInvariant()
+```
 
-`https://github.com/loveawayss/JustReleases/releases/latest/download/<nome-do-arquivo>`
+## Validação Contínua (CI)
 
-Links `raw.githubusercontent.com` devem ser reservados para manifestos pequenos. Instaladores devem ficar em GitHub Releases.
-
-## Verificacao de integridade
-
-O SHA-256 publicado nos manifestos deve corresponder exatamente ao asset distribuido. Hash sozinho comprova integridade do arquivo, mas nao substitui assinatura digital para autenticar a origem.
-
-## Regras
-
-- Nao incluir secrets, tokens, chaves privadas ou dados pessoais.
-- Nao publicar arquivos de teste ou builds sem identificacao.
-- Nao alterar manifesto sem atualizar o arquivo correspondente.
-- Manter nomes de versoes e arquivos consistentes com cada produto.
-
-## Links
-
-- Download publico das Releases: https://github.com/loveawayss/JustReleases/releases/latest
+Todas as alterações em manifestos são auditadas via GitHub Actions (`.github/workflows/ci.yml`):
+- Validação estrita de sintaxe e schemas JSON.
+- Consistência de vínculos com as releases oficiais do GitHub.
+- Verificação de formato e integridade dos hashes SHA-256.
+- Validação criptográfica de assinaturas ECDSA P-256 para o JustPrivate.
 
